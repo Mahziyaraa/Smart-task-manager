@@ -299,20 +299,22 @@ body::before {
 
 /* باکس Tutorial پایه */
 
+
+/* حالت لایت مود */
+
 #tutorialBox {
     position: fixed;
     top: 60px;
     right: 20px;
-    background-color: rgba(0, 0, 0, 0.8);
-    /* حالت عادی */
-    color: #fff;
-    /* متن عادی */
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #333;
     padding: 15px 20px;
     border-radius: 10px;
+    border: 2px solid #ddd;
     max-width: 300px;
     font-size: 14px;
     z-index: 9999;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s, color 0.3s;
 }
 
@@ -551,4 +553,13 @@ body.dark-mode .column.drag-over {
         transform: translate(-50%, 100px);
         opacity: 0;
     }
+}
+
+body.dark-mode .column h2 {
+    color: #111 !important;
+    /* مشکی نرم */
+    background-color: #9ca8d6;
+    /* آبی خاکستری */
+    border-bottom: 2px solid #555;
+    font-weight: bold;
 }
