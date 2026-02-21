@@ -396,6 +396,31 @@ document.addEventListener('keydown', (e) => {
         modal.style.display = 'none';
         currentEditId = null;
     }
+}); // برای موبایل
+let touchItem = null;
+
+document.addEventListener('touchstart', (e) => {
+    if (e.target.closest('.task')) {
+        touchItem = e.target.closest('.task');
+        touchItem.style.opacity = '0.5';
+    }
+});
+
+document.addEventListener('touchmove', (e) => {
+    if (!touchItem) return;
+    e.preventDefault();
+    const touch = e.touches[0];
+    touchItem.style.position = 'fixed';
+    touchItem.style.left = touch.clientX + 'px';
+    touchItem.style.top = touch.clientY + 'px';
+});
+
+document.addEventListener('touchend', (e) => {
+    if (!touchItem) return;
+    touchItem.style.opacity = '1';
+    touchItem.style.position = '';
+    // تشخیص ستون مقصد و جابجایی...
+    touchItem = null;
 });
 
 /* ========= اجرای اولیه ========= */
