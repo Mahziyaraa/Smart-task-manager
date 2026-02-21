@@ -41,27 +41,23 @@ accordions.forEach(btn => {
 /* ========= Board و بک‌گراند ========= */
 const bgFileInput = document.getElementById("bgFileInput");
 const applyBgBtn = document.getElementById("applyBgBtn");
-const boardEl = document.querySelector("main.board");
 
 applyBgBtn.addEventListener("click", () => {
     const file = bgFileInput.files[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = function(e) {
-        boardEl.style.backgroundImage = `url(${e.target.result})`;
-        boardEl.style.backgroundSize = "cover";
-        boardEl.style.backgroundPosition = "center";
+        document.body.style.setProperty('--bg-image', `url(${e.target.result})`);
         localStorage.setItem("boardBg", e.target.result);
     }
     reader.readAsDataURL(file);
     bgFileInput.value = "";
 });
 
+// بارگذاری بک‌گراند ذخیره شده
 const savedBg = localStorage.getItem("boardBg");
 if (savedBg) {
-    boardEl.style.backgroundImage = `url(${savedBg})`;
-    boardEl.style.backgroundSize = "cover";
-    boardEl.style.backgroundPosition = "center";
+    document.body.style.setProperty('--bg-image', `url(${savedBg})`);
 }
 
 /* ========= renderTasks ========= */
@@ -94,7 +90,6 @@ function renderTasks() {
         const deleteBtn = document.createElement("button");
         deleteBtn.textContent = "❌";
         deleteBtn.className = "delete-btn";
-
         deleteBtn.addEventListener("click", (e) => {
             e.stopPropagation();
             tasks = tasks.filter(t => t.id !== task.id);
@@ -109,7 +104,10 @@ function renderTasks() {
         if (task.priority === "medium") div.style.backgroundColor = "#ffe699";
         if (task.priority === "low") div.style.backgroundColor = "#e3e8ff";
 
+        /* باز کردن modal */
         div.addEventListener("dblclick", () => openModal(task));
+
+        /* Drag & Drop */
         div.addEventListener("dragstart", (e) => {
             e.dataTransfer.setData("text/plain", task.id);
             div.classList.add("dragging");
@@ -132,22 +130,14 @@ addTaskBtn.addEventListener("click", () => {
     renderTasks();
 });
 
-/* ========= Drag & Drop ========= */
-
+/* ========= Drag & Drop ستون ها ========= */
 const columns = document.querySelectorAll(".task-list");
-
 columns.forEach(column => {
-
-    column.addEventListener("dragover", (e) => {
-        e.preventDefault();
-    });
-
+    column.addEventListener("dragover", (e) => e.preventDefault());
     column.addEventListener("drop", (e) => {
         e.preventDefault();
-
         const taskId = e.dataTransfer.getData("text/plain");
         if (!taskId) return;
-
         const task = tasks.find(t => t.id === Number(taskId));
         if (task) {
             task.status = column.id;
@@ -155,7 +145,6 @@ columns.forEach(column => {
             renderTasks();
         }
     });
-
 });
 
 /* ========= Modal functions ========= */

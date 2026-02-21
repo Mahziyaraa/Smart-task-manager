@@ -238,3 +238,45 @@ header h1 {
     cursor: pointer;
     font-size: 20px;
 }
+
+
+/* لایه بک‌گراند صفحه */
+
+body {
+    position: relative;
+    margin: 0;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    /* رنگ پایه اگر تصویر نباشه */
+}
+
+
+/* لایه تصویر بک‌گراند */
+
+
+/* body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+} */
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-image: var(--bg-image, none);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
