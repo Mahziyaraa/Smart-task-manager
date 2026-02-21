@@ -34,25 +34,27 @@
 
     </main>
 
-    <script src="script.js"></script>
+    <!-- Modal برای ویرایش تسک -->
     <div id="taskModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>ویرایش تسک</h2>
             <input type="text" id="modalTitle" placeholder="عنوان تسک">
             <select id="modalStatus">
-      <option value="todo">Todo</option>
-      <option value="doing">Doing</option>
-      <option value="done">Done</option>
-    </select>
+        <option value="todo">Todo</option>
+        <option value="doing">Doing</option>
+        <option value="done">Done</option>
+      </select>
             <select id="modalPriority">
-      <option value="low">کم</option>
-      <option value="medium">متوسط</option>
-      <option value="high">زیاد</option>
-    </select>
+        <option value="low">کم</option>
+        <option value="medium">متوسط</option>
+        <option value="high">زیاد</option>
+      </select>
             <button id="saveTaskBtn">ذخیره</button>
         </div>
     </div>
+
+    <script src="script.js"></script>
 </body>
 
 </html>

@@ -7,85 +7,137 @@ const doneEl = document.getElementById("done");
 // بارگذاری تسک‌ها از LocalStorage
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
+/* ========= Modal متغیرها ========= */
+const modal = document.getElementById("taskModal");
+const modalTitle = document.getElementById("modalTitle");
+const modalStatus = document.getElementById("modalStatus");
+const modalPriority = document.getElementById("modalPriority");
+const saveTaskBtn = document.getElementById("saveTaskBtn");
+const closeModal = document.querySelector(".close");
+
+let currentEditId = null;
+
 /* ========= تابع رسم تسک‌ها ========= */
 function renderTasks() {
-  // پاک کردن محتوای ستون‌ها
-  todoEl.innerHTML = "";
-  doingEl.innerHTML = "";
-  doneEl.innerHTML = "";
+    // پاک کردن ستون‌ها
+    todoEl.innerHTML = "";
+    doingEl.innerHTML = "";
+    doneEl.innerHTML = "";
 
-  tasks.forEach(task => {
-    const div = document.createElement("div");
-    div.className = "task";
-    div.textContent = task.title;
-    div.dataset.id = task.id;
-    div.dataset.status = task.status;
-    div.draggable = true;
+    tasks.forEach(task => {
+        const div = document.createElement("div");
+        div.className = "task";
+        div.textContent = task.title;
+        div.dataset.id = task.id;
+        div.dataset.status = task.status;
+        div.draggable = true;
 
-    /* ===== حذف تسک با دابل کلیک ===== */
-    div.addEventListener("dblclick", () => {
-      tasks = tasks.filter(t => t.id !== task.id);
-      localStorage.setItem("tasks", JSON.stringify(tasks));
-      renderTasks();
+        // رنگ‌بندی بر اساس اولویت
+        if (task.priority === "high") div.style.backgroundColor = "#ff9999"; // قرمز
+        if (task.priority === "medium") div.style.backgroundColor = "#ffe699"; // زرد
+        if (task.priority === "low") div.style.backgroundColor = "#e3e8ff"; // آبی
+
+        /* ===== باز کردن Modal برای ویرایش ===== */
+        div.addEventListener("dblclick", () => {
+            openModal(task);
+        });
+
+        /* ===== حذف با دابل کلیک + Shift (اختیاری) ===== */
+        // میتونی اضافه کنی ترکیبی برای حذف هم
+
+        /* ===== Drag شروع ===== */
+        div.addEventListener("dragstart", () => {
+            div.classList.add("dragging");
+        });
+
+        /* ===== Drag پایان ===== */
+        div.addEventListener("dragend", () => {
+            div.classList.remove("dragging");
+        });
+
+        // اضافه کردن به ستون صحیح
+        if (task.status === "todo") todoEl.appendChild(div);
+        if (task.status === "doing") doingEl.appendChild(div);
+        if (task.status === "done") doneEl.appendChild(div);
     });
-
-    /* ===== شروع Drag ===== */
-    div.addEventListener("dragstart", () => {
-      div.classList.add("dragging");
-    });
-
-    /* ===== پایان Drag ===== */
-    div.addEventListener("dragend", () => {
-      div.classList.remove("dragging");
-    });
-
-    /* ===== اضافه کردن تسک به ستون صحیح ===== */
-    if(task.status === "todo") todoEl.appendChild(div);
-    if(task.status === "doing") doingEl.appendChild(div);
-    if(task.status === "done") doneEl.appendChild(div);
-  });
 }
 
 /* ========= اضافه کردن تسک جدید ========= */
 addTaskBtn.addEventListener("click", () => {
-  const title = prompt("اسم تسک رو بنویس:");
-  if(!title) return;
+    const title = prompt("اسم تسک رو بنویس:");
+    if (!title) return;
 
-  const task = {
-    id: Date.now(), // شناسه یکتا
-    title,
-    status: "todo" // تسک جدید همیشه تو Todo میره
-  };
+    const task = {
+        id: Date.now(),
+        title,
+        status: "todo",
+        priority: "low"
+    };
 
-  tasks.push(task);
-  localStorage.setItem("tasks", JSON.stringify(tasks));
-  renderTasks();
+    tasks.push(task);
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+    renderTasks();
 });
 
-/* ========= Drag & Drop واقعی با آپدیت ستون‌ها ========= */
+/* ========= Drag & Drop واقعی ========= */
 const columns = document.querySelectorAll(".task-list");
 
 columns.forEach(column => {
-  // اجازه درگ کردن روی ستون
-  column.addEventListener("dragover", e => {
-    e.preventDefault();
-    const dragging = document.querySelector(".dragging");
-    if(!dragging) return;
-    column.appendChild(dragging);
-  });
+    column.addEventListener("dragover", e => {
+        e.preventDefault();
+        const dragging = document.querySelector(".dragging");
+        if (!dragging) return;
+        column.appendChild(dragging);
+    });
 
-  // وقتی تسک رها شد، ستونش رو آپدیت کن
-  column.addEventListener("drop", () => {
-    const dragging = document.querySelector(".dragging");
-    if(!dragging) return;
+    column.addEventListener("drop", () => {
+        const dragging = document.querySelector(".dragging");
+        if (!dragging) return;
 
-    const taskId = Number(dragging.dataset.id);
-    const task = tasks.find(t => t.id === taskId);
-    task.status = column.id; // آپدیت ستون
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-    renderTasks();
-  });
+        const taskId = Number(dragging.dataset.id);
+        const task = tasks.find(t => t.id === taskId);
+        task.status = column.id;
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+        renderTasks();
+    });
 });
 
-/* ========= اجرای اولیه renderTasks ========= */
+/* ========= Modal functions ========= */
+function openModal(task) {
+    currentEditId = task.id;
+    modal.style.display = "flex";
+    modalTitle.value = task.title;
+    modalStatus.value = task.status;
+    modalPriority.value = task.priority || "low";
+}
+
+// بستن Modal
+closeModal.addEventListener("click", () => {
+    modal.style.display = "none";
+    currentEditId = null;
+});
+
+window.addEventListener("click", (e) => {
+    if (e.target === modal) {
+        modal.style.display = "none";
+        currentEditId = null;
+    }
+});
+
+// ذخیره تغییرات Modal
+saveTaskBtn.addEventListener("click", () => {
+    if (currentEditId === null) return;
+
+    const task = tasks.find(t => t.id === currentEditId);
+    task.title = modalTitle.value;
+    task.status = modalStatus.value;
+    task.priority = modalPriority.value;
+
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+    renderTasks();
+    modal.style.display = "none";
+    currentEditId = null;
+});
+
+/* ========= اجرای اولیه ========= */
 renderTasks();
