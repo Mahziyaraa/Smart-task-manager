@@ -280,3 +280,65 @@ body::before {
     background-position: center;
     background-repeat: no-repeat;
 }
+
+#startTutorial {
+    margin-top: 10px;
+    width: 100%;
+    padding: 8px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#startTutorial:hover {
+    background-color: #45a049;
+}
+
+#tutorialBox {
+    display: none;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid #4CAF50;
+    border-radius: 8px;
+    padding: 12px;
+    max-width: 220px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    font-family: Arial, sans-serif;
+    color: #333;
+    z-index: 999;
+    transition: all 0.2s ease;
+}
+
+#tutorialBox p {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+}
+
+#tutorialBox button {
+    margin-right: 5px;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+#nextStep {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#nextStep:hover {
+    background-color: #45a049;
+}
+
+#endTutorial {
+    background-color: #f44336;
+    color: white;
+}
+
+#endTutorial:hover {
+    background-color: #d7372f;
+}

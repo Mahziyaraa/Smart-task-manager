@@ -179,6 +179,61 @@ saveTaskBtn.addEventListener("click", () => {
     modal.style.display = "none";
     currentEditId = null;
 });
+const startTutorialBtn = document.getElementById("startTutorial");
 
+startTutorialBtn.addEventListener("click", () => {
+    // اینجا تابع شروع Tutorial رو صدا می‌زنیم
+    startTutorial();
+});
+const tutorialBox = document.getElementById("tutorialBox");
+const tutorialText = document.getElementById("tutorialText");
+const nextStepBtn = document.getElementById("nextStep");
+const endTutorialBtn = document.getElementById("endTutorial");
+
+let currentStep = 0;
+
+const tutorialSteps = [
+    { text: "برای اضافه کردن تسک، این دکمه رو بزن", target: "#addTaskBtn" },
+    { text: "با این فیلترها می‌توانی ستون و اولویت تسک‌ها را محدود کنی", target: ".filters" },
+    { text: "تسک‌ها در این ستون نمایش داده می‌شوند", target: ".column[data-status='todo']" },
+    { text: "می‌توان تسک‌ها را ویرایش یا حذف کرد", target: ".task-list" },
+    { text: "با منوی همبرگر می‌توانید بک‌گراند را تغییر دهید", target: ".hamburger-btn" },
+    { text: "این دکمه Tutorial هم برای راهنمایی تعاملی استفاده می‌شود", target: "#startTutorial" }
+];
+
+function showStep(stepIndex) {
+    if (stepIndex >= tutorialSteps.length) {
+        tutorialBox.style.display = "none";
+        return;
+    }
+
+    const step = tutorialSteps[stepIndex];
+    const targetEl = document.querySelector(step.target);
+
+    if (!targetEl) return;
+
+    const rect = targetEl.getBoundingClientRect();
+
+    // موقعیت Tooltip نسبت به المان هدف
+    tutorialBox.style.top = rect.bottom + window.scrollY + 10 + "px";
+    tutorialBox.style.left = rect.left + window.scrollX + "px";
+
+    tutorialText.textContent = step.text;
+    tutorialBox.style.display = "block";
+}
+nextStepBtn.addEventListener("click", () => {
+    currentStep++;
+    showStep(currentStep);
+});
+
+endTutorialBtn.addEventListener("click", () => {
+    tutorialBox.style.display = "none";
+    currentStep = 0;
+});
+
+function startTutorial() {
+    currentStep = 0;
+    showStep(currentStep);
+}
 /* ========= اجرای اولیه ========= */
 renderTasks();
