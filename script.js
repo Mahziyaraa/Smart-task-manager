@@ -17,14 +17,33 @@ const closeModal = document.querySelector(".close");
 
 let currentEditId = null;
 
+/* ========= فیلتر ========= */
+const filterColumn = document.getElementById("filterColumn");
+const filterPriority = document.getElementById("filterPriority");
+
+filterColumn.addEventListener("change", renderTasks);
+filterPriority.addEventListener("change", renderTasks);
+
 /* ========= تابع رسم تسک‌ها ========= */
 function renderTasks() {
+    // مرتب‌سازی بر اساس اولویت
+    const priorityOrder = { high: 1, medium: 2, low: 3 };
+    tasks.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
+
     // پاک کردن ستون‌ها
     todoEl.innerHTML = "";
     doingEl.innerHTML = "";
     doneEl.innerHTML = "";
 
+    const selectedColumn = filterColumn.value;
+    const selectedPriority = filterPriority.value;
+
     tasks.forEach(task => {
+
+        // چک کردن فیلتر
+        if (selectedColumn !== "all" && task.status !== selectedColumn) return;
+        if (selectedPriority !== "all" && task.priority !== selectedPriority) return;
+
         const div = document.createElement("div");
         div.className = "task";
         div.textContent = task.title;
@@ -41,9 +60,6 @@ function renderTasks() {
         div.addEventListener("dblclick", () => {
             openModal(task);
         });
-
-        /* ===== حذف با دابل کلیک + Shift (اختیاری) ===== */
-        // میتونی اضافه کنی ترکیبی برای حذف هم
 
         /* ===== Drag شروع ===== */
         div.addEventListener("dragstart", () => {
