@@ -14,7 +14,23 @@
         <h1>Smart Task Manager</h1>
         <button id="addTaskBtn">+ Add Task</button>
     </header>
+    <div class="filters">
+        <label for="filterColumn">فیلتر ستون:</label>
+        <select id="filterColumn">
+    <option value="all">همه</option>
+    <option value="todo">Todo</option>
+    <option value="doing">Doing</option>
+    <option value="done">Done</option>
+  </select>
 
+        <label for="filterPriority">فیلتر اولویت:</label>
+        <select id="filterPriority">
+    <option value="all">همه</option>
+    <option value="low">کم</option>
+    <option value="medium">متوسط</option>
+    <option value="high">زیاد</option>
+  </select>
+    </div>
     <main class="board">
 
         <div class="column" data-status="todo">
