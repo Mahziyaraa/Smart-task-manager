@@ -23,9 +23,31 @@ filterPriority.addEventListener("change", renderTasks);
 /* ========= Hamburger Menu ========= */
 const hamburgerMenu = document.querySelector(".hamburger-menu");
 const hamburgerBtn = document.querySelector(".hamburger-btn");
+const darkModeBtn = document.getElementById("darkModeBtn");
+
+// بارگذاری حالت ذخیره شده از localStorage
+if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark-mode");
+}
+
+// دکمه Dark Mode
+darkModeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+    if (document.body.classList.contains("dark-mode")) {
+        localStorage.setItem("darkMode", "enabled");
+    } else {
+        localStorage.setItem("darkMode", "disabled");
+    }
+});
 hamburgerBtn.addEventListener("click", () => {
     hamburgerMenu.classList.toggle("active");
 });
+if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark-mode");
+    darkModeBtn.checked = true;
+} else {
+    darkModeBtn.checked = false;
+}
 
 /* ========= Accordion ========= */
 const accordions = document.querySelectorAll(".accordion-btn");
