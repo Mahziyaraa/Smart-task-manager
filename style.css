@@ -147,3 +147,44 @@ header button:hover {
     font-size: 1.5rem;
     cursor: pointer;
 }
+
+
+/* ===== فیلترها ===== */
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+    margin: 20px 0;
+    padding: 10px 20px;
+    background-color: #f0f4ff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.filters label {
+    font-weight: bold;
+    margin-right: 5px;
+    color: #333;
+}
+
+.filters select {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filters select:hover {
+    border-color: #00bfff;
+    background-color: #e6f2ff;
+}
+
+.filters select:focus {
+    outline: none;
+    border-color: #0077cc;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
