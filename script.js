@@ -1,36 +1,77 @@
-/* ========= انتخاب عناصر و بارگذاری داده‌ها ========= */
+/* ========= عناصر ========= */
 const addTaskBtn = document.getElementById("addTaskBtn");
 const todoEl = document.getElementById("todo");
 const doingEl = document.getElementById("doing");
 const doneEl = document.getElementById("done");
-
-// بارگذاری تسک‌ها از LocalStorage
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-/* ========= Modal متغیرها ========= */
+/* ========= Modal تسک ========= */
 const modal = document.getElementById("taskModal");
 const modalTitle = document.getElementById("modalTitle");
 const modalStatus = document.getElementById("modalStatus");
 const modalPriority = document.getElementById("modalPriority");
 const saveTaskBtn = document.getElementById("saveTaskBtn");
 const closeModal = document.querySelector(".close");
-
 let currentEditId = null;
 
 /* ========= فیلتر ========= */
 const filterColumn = document.getElementById("filterColumn");
 const filterPriority = document.getElementById("filterPriority");
-
 filterColumn.addEventListener("change", renderTasks);
 filterPriority.addEventListener("change", renderTasks);
 
-/* ========= تابع رسم تسک‌ها ========= */
+/* ========= Hamburger Menu ========= */
+const hamburgerMenu = document.querySelector(".hamburger-menu");
+const hamburgerBtn = document.querySelector(".hamburger-btn");
+hamburgerBtn.addEventListener("click", () => {
+    hamburgerMenu.classList.toggle("active");
+});
+
+/* ========= Accordion ========= */
+const accordions = document.querySelectorAll(".accordion-btn");
+accordions.forEach(btn => {
+    btn.addEventListener("click", () => {
+        const content = btn.nextElementSibling;
+        if (content.style.maxHeight) {
+            content.style.maxHeight = null;
+        } else {
+            content.style.maxHeight = content.scrollHeight + "px";
+        }
+    });
+});
+
+/* ========= Board و بک‌گراند ========= */
+const bgFileInput = document.getElementById("bgFileInput");
+const applyBgBtn = document.getElementById("applyBgBtn");
+const boardEl = document.querySelector("main.board");
+
+applyBgBtn.addEventListener("click", () => {
+    const file = bgFileInput.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        boardEl.style.backgroundImage = `url(${e.target.result})`;
+        boardEl.style.backgroundSize = "cover";
+        boardEl.style.backgroundPosition = "center";
+        localStorage.setItem("boardBg", e.target.result);
+    }
+    reader.readAsDataURL(file);
+    bgFileInput.value = "";
+});
+
+// بارگذاری بک‌گراند ذخیره شده
+const savedBg = localStorage.getItem("boardBg");
+if (savedBg) {
+    boardEl.style.backgroundImage = `url(${savedBg})`;
+    boardEl.style.backgroundSize = "cover";
+    boardEl.style.backgroundPosition = "center";
+}
+
+/* ========= تابع renderTasks ========= */
 function renderTasks() {
-    // مرتب‌سازی بر اساس اولویت
     const priorityOrder = { high: 1, medium: 2, low: 3 };
     tasks.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
 
-    // پاک کردن ستون‌ها
     todoEl.innerHTML = "";
     doingEl.innerHTML = "";
     doneEl.innerHTML = "";
@@ -39,8 +80,6 @@ function renderTasks() {
     const selectedPriority = filterPriority.value;
 
     tasks.forEach(task => {
-
-        // چک کردن فیلتر
         if (selectedColumn !== "all" && task.status !== selectedColumn) return;
         if (selectedPriority !== "all" && task.priority !== selectedPriority) return;
 
@@ -51,70 +90,43 @@ function renderTasks() {
         div.dataset.status = task.status;
         div.draggable = true;
 
-        // رنگ‌بندی بر اساس اولویت
-        if (task.priority === "high") div.style.backgroundColor = "#ff9999"; // قرمز
-        if (task.priority === "medium") div.style.backgroundColor = "#ffe699"; // زرد
-        if (task.priority === "low") div.style.backgroundColor = "#e3e8ff"; // آبی
+        if (task.priority === "high") div.style.backgroundColor = "#ff9999";
+        if (task.priority === "medium") div.style.backgroundColor = "#ffe699";
+        if (task.priority === "low") div.style.backgroundColor = "#e3e8ff";
 
-        /* ===== باز کردن Modal برای ویرایش ===== */
-        div.addEventListener("dblclick", () => {
-            openModal(task);
-        });
+        div.addEventListener("dblclick", () => openModal(task));
+        div.addEventListener("dragstart", () => div.classList.add("dragging"));
+        div.addEventListener("dragend", () => div.classList.remove("dragging"));
 
-        /* ===== Drag شروع ===== */
-        div.addEventListener("dragstart", () => {
-            div.classList.add("dragging");
-        });
-
-        /* ===== Drag پایان ===== */
-        div.addEventListener("dragend", () => {
-            div.classList.remove("dragging");
-        });
-
-        // اضافه کردن به ستون صحیح
         if (task.status === "todo") todoEl.appendChild(div);
         if (task.status === "doing") doingEl.appendChild(div);
         if (task.status === "done") doneEl.appendChild(div);
     });
 }
 
-/* ========= اضافه کردن تسک جدید ========= */
+/* ========= Add Task ========= */
 addTaskBtn.addEventListener("click", () => {
-    const title = prompt("چکار میخوایی بکنی:");
+    const title = prompt("اسم تسک رو بنویس:");
     if (!title) return;
-
-    const task = {
-        id: Date.now(),
-        title,
-        status: "todo",
-        priority: "low"
-    };
-
+    const task = { id: Date.now(), title, status: "todo", priority: "low" };
     tasks.push(task);
     localStorage.setItem("tasks", JSON.stringify(tasks));
     renderTasks();
 });
 
-/* ========= Drag & Drop واقعی ========= */
+/* ========= Drag & Drop ========= */
 const columns = document.querySelectorAll(".task-list");
-
 columns.forEach(column => {
-    column.addEventListener("dragover", e => {
-        e.preventDefault();
-        const dragging = document.querySelector(".dragging");
-        if (!dragging) return;
-        column.appendChild(dragging);
-    });
-
+    column.addEventListener("dragover", e => { e.preventDefault(); const dragging = document.querySelector(".dragging"); if (dragging) column.appendChild(dragging); });
     column.addEventListener("drop", () => {
         const dragging = document.querySelector(".dragging");
-        if (!dragging) return;
-
-        const taskId = Number(dragging.dataset.id);
-        const task = tasks.find(t => t.id === taskId);
-        task.status = column.id;
-        localStorage.setItem("tasks", JSON.stringify(tasks));
-        renderTasks();
+        if (dragging) {
+            const taskId = Number(dragging.dataset.id);
+            const task = tasks.find(t => t.id === taskId);
+            task.status = column.id;
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            renderTasks();
+        }
     });
 });
 
@@ -127,28 +139,22 @@ function openModal(task) {
     modalPriority.value = task.priority || "low";
 }
 
-// بستن Modal
 closeModal.addEventListener("click", () => {
     modal.style.display = "none";
     currentEditId = null;
 });
 
 window.addEventListener("click", (e) => {
-    if (e.target === modal) {
-        modal.style.display = "none";
-        currentEditId = null;
-    }
+    if (e.target === modal) { modal.style.display = "none";
+        currentEditId = null; }
 });
 
-// ذخیره تغییرات Modal
 saveTaskBtn.addEventListener("click", () => {
     if (currentEditId === null) return;
-
     const task = tasks.find(t => t.id === currentEditId);
     task.title = modalTitle.value;
     task.status = modalStatus.value;
     task.priority = modalPriority.value;
-
     localStorage.setItem("tasks", JSON.stringify(tasks));
     renderTasks();
     modal.style.display = "none";
