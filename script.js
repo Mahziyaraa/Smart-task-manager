@@ -80,7 +80,7 @@ function renderTasks() {
 
 /* ========= اضافه کردن تسک جدید ========= */
 addTaskBtn.addEventListener("click", () => {
-    const title = prompt("اسم تسک رو بنویس:");
+    const title = prompt("چکار میخوایی بکنی:");
     if (!title) return;
 
     const task = {

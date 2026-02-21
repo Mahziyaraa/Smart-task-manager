@@ -12,39 +12,39 @@
 
     <header>
         <h1>Smart Task Manager</h1>
-        <button id="addTaskBtn">+ Add Task</button>
+        <button id="addTaskBtn">+ اضافه کردن</button>
     </header>
     <div class="filters">
-        <label for="filterColumn">فیلتر ستون:</label>
+        <label for="filterColumn">فیلتر</label>
         <select id="filterColumn">
     <option value="all">همه</option>
-    <option value="todo">Todo</option>
-    <option value="doing">Doing</option>
-    <option value="done">Done</option>
+    <option value="todo">باید انجام بدم</option>
+    <option value="doing">دارم انجام میدم</option>
+    <option value="done">انجام دادم</option>
   </select>
 
-        <label for="filterPriority">فیلتر اولویت:</label>
+        <label for="filterPriority">اولویت:</label>
         <select id="filterPriority">
     <option value="all">همه</option>
-    <option value="low">کم</option>
-    <option value="medium">متوسط</option>
-    <option value="high">زیاد</option>
+    <option value="low">یکم مهم</option>
+    <option value="medium">مهمه</option>
+    <option value="high">خیلی مهمه</option>
   </select>
     </div>
     <main class="board">
 
         <div class="column" data-status="todo">
-            <h2>Todo</h2>
+            <h2>باید انجام بدم</h2>
             <div class="task-list" id="todo"></div>
         </div>
 
         <div class="column" data-status="doing">
-            <h2>Doing</h2>
+            <h2>دارم انجام میدم</h2>
             <div class="task-list" id="doing"></div>
         </div>
 
         <div class="column" data-status="done">
-            <h2>Done</h2>
+            <h2>انجام دادم</h2>
             <div class="task-list" id="done"></div>
         </div>
 
@@ -54,19 +54,19 @@
     <div id="taskModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>ویرایش تسک</h2>
+            <h2>ویرایش کارم</h2>
             <input type="text" id="modalTitle" placeholder="عنوان تسک">
             <select id="modalStatus">
-        <option value="todo">Todo</option>
-        <option value="doing">Doing</option>
-        <option value="done">Done</option>
+        <option value="todo">باید انجام میدم</option>
+        <option value="doing">دارم انجام میدم</option>
+        <option value="done">انجام دادم</option>
       </select>
             <select id="modalPriority">
-        <option value="low">کم</option>
-        <option value="medium">متوسط</option>
-        <option value="high">زیاد</option>
+        <option value="low">یکم مهم</option>
+        <option value="medium">مهم</option>
+        <option value="high">خیلی مهم</option>
       </select>
-            <button id="saveTaskBtn">ذخیره</button>
+            <button id="saveTaskBtn">برو بریم</button>
         </div>
     </div>
 
