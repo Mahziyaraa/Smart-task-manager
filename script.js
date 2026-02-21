@@ -38,7 +38,7 @@ darkModeBtn.addEventListener("click", () => {
     } else {
         localStorage.setItem("darkMode", "disabled");
     }
-    renderTasks(); // این خط اضافه بشه بعد toggle
+    renderTasks();
 });
 
 hamburgerBtn.addEventListener("click", () => {
@@ -84,6 +84,92 @@ if (savedBg) {
     document.body.style.setProperty('--bg-image', `url(${savedBg})`);
 }
 
+/* ========= Toast Notification ========= */
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: ${type === 'success' ? '#4CAF50' : '#f44336'};
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        z-index: 10000;
+        font-size: 14px;
+        animation: slideUp 0.3s ease;
+    `;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.animation = 'slideDown 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+/* ========= آمار و پیشرفت ========= */
+function updateStats() {
+    const total = tasks.length;
+    const done = tasks.filter(t => t.status === 'done').length;
+    const percent = total ? Math.round((done / total) * 100) : 0;
+
+    // اگر المان آمار وجود داره، آپدیت کن
+    const totalEl = document.getElementById('totalTasks');
+    const doneEl = document.getElementById('doneTasks');
+    const progressEl = document.getElementById('progressPercent');
+
+    if (totalEl) totalEl.textContent = total;
+    if (doneEl) doneEl.textContent = done;
+    if (progressEl) progressEl.textContent = percent + '%';
+}
+
+/* ========= جستجوی زنده ========= */
+const searchInput = document.getElementById('searchTasks');
+if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        document.querySelectorAll('.task').forEach(task => {
+            const text = task.querySelector('span').textContent.toLowerCase();
+            task.style.display = text.includes(term) ? 'flex' : 'none';
+        });
+    });
+}
+
+/* ========= ددلاین ========= */
+function getDeadlineBadge(deadline) {
+    if (!deadline) return '';
+    const days = Math.ceil((new Date(deadline) - new Date()) / (1000 * 60 * 60 * 24));
+    let color = '#4CAF50';
+    let text = `${days} روز`;
+
+    if (days < 0) {
+        color = '#f44336';
+        text = 'منقضی';
+    } else if (days <= 2) {
+        color = '#ff9800';
+        text = `⏳ ${days} روز`;
+    }
+
+    return `<span style="
+        background: ${color};
+        color: white;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+        margin-right: 5px;
+    ">${text}</span>`;
+}
+
+/* ========= تابع کمکی برای نام ستون ========= */
+function getColumnName(status) {
+    const names = { todo: "Todo", doing: "Doing", done: "Done" };
+    return names[status] || status;
+}
+
 /* ========= renderTasks ========= */
 function renderTasks() {
     const priorityOrder = { high: 1, medium: 2, low: 3 };
@@ -106,9 +192,9 @@ function renderTasks() {
         div.dataset.status = task.status;
         div.draggable = true;
 
-        /* متن */
+        /* متن و ددلاین */
         const span = document.createElement("span");
-        span.textContent = task.title;
+        span.innerHTML = getDeadlineBadge(task.deadline) + task.title;
 
         /* دکمه حذف */
         const deleteBtn = document.createElement("button");
@@ -119,10 +205,14 @@ function renderTasks() {
             tasks = tasks.filter(t => t.id !== task.id);
             localStorage.setItem("tasks", JSON.stringify(tasks));
             renderTasks();
+            showToast('تسک حذف شد 🗑️');
+            updateStats();
         });
 
         div.appendChild(span);
         div.appendChild(deleteBtn);
+
+        /* رنگ‌بندی اولویت */
         if (document.body.classList.contains("dark-mode")) {
             if (task.priority === "high") div.style.backgroundColor = "#cc6666";
             if (task.priority === "medium") div.style.backgroundColor = "#ccbb66";
@@ -139,39 +229,70 @@ function renderTasks() {
         /* Drag & Drop */
         div.addEventListener("dragstart", (e) => {
             e.dataTransfer.setData("text/plain", task.id);
+            e.dataTransfer.effectAllowed = "move";
             div.classList.add("dragging");
         });
-        div.addEventListener("dragend", () => div.classList.remove("dragging"));
+
+        div.addEventListener("dragend", () => {
+            div.classList.remove("dragging");
+        });
 
         if (task.status === "todo") todoEl.appendChild(div);
         if (task.status === "doing") doingEl.appendChild(div);
         if (task.status === "done") doneEl.appendChild(div);
     });
+
+    updateStats();
 }
 
-/* ========= Add Task ========= */
+/* ========= Add Task بهبود یافته ========= */
 addTaskBtn.addEventListener("click", () => {
+    // استفاده از modal به جای prompt
     const title = prompt("اسم تسک رو بنویس:");
     if (!title) return;
-    const task = { id: Date.now(), title, status: "todo", priority: "low" };
+
+    const deadline = prompt("ددلاین (اختیاری، مثال: 2024-12-31):");
+
+    const task = {
+        id: Date.now(),
+        title,
+        status: "todo",
+        priority: "low",
+        deadline: deadline || null
+    };
+
     tasks.push(task);
     localStorage.setItem("tasks", JSON.stringify(tasks));
     renderTasks();
+    showToast('تسک جدید اضافه شد ✅');
 });
 
-/* ========= Drag & Drop ستون ها ========= */
+/* ========= Drag & Drop ستون‌ها ========= */
 const columns = document.querySelectorAll(".task-list");
+
 columns.forEach(column => {
-    column.addEventListener("dragover", (e) => e.preventDefault());
+    column.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        column.classList.add("drag-over");
+    });
+
+    column.addEventListener("dragleave", () => {
+        column.classList.remove("drag-over");
+    });
+
     column.addEventListener("drop", (e) => {
         e.preventDefault();
+        column.classList.remove("drag-over");
+
         const taskId = e.dataTransfer.getData("text/plain");
         if (!taskId) return;
+
         const task = tasks.find(t => t.id === Number(taskId));
-        if (task) {
+        if (task && task.status !== column.id) {
             task.status = column.id;
             localStorage.setItem("tasks", JSON.stringify(tasks));
             renderTasks();
+            showToast(`تسک به "${getColumnName(column.id)}" منتقل شد ✅`);
         }
     });
 });
@@ -207,15 +328,12 @@ saveTaskBtn.addEventListener("click", () => {
     renderTasks();
     modal.style.display = "none";
     currentEditId = null;
+    showToast('تسک ذخیره شد 💾');
 });
+
+/* ========= Tutorial ========= */
 const startTutorialBtn = document.getElementById("startTutorial");
-
-startTutorialBtn.addEventListener("click", () => {
-    // اینجا تابع شروع Tutorial رو صدا می‌زنیم
-    startTutorial();
-});
 const tutorialBox = document.getElementById("tutorialBox");
-
 const tutorialText = document.getElementById("tutorialText");
 const nextStepBtn = document.getElementById("nextStep");
 const endTutorialBtn = document.getElementById("endTutorial");
@@ -243,14 +361,12 @@ function showStep(stepIndex) {
     if (!targetEl) return;
 
     const rect = targetEl.getBoundingClientRect();
-
-    // موقعیت Tooltip نسبت به المان هدف
     tutorialBox.style.top = rect.bottom + window.scrollY + 10 + "px";
     tutorialBox.style.left = rect.left + window.scrollX + "px";
-
     tutorialText.textContent = step.text;
     tutorialBox.style.display = "block";
 }
+
 nextStepBtn.addEventListener("click", () => {
     currentStep++;
     showStep(currentStep);
@@ -265,5 +381,22 @@ function startTutorial() {
     currentStep = 0;
     showStep(currentStep);
 }
+
+startTutorialBtn.addEventListener("click", startTutorial);
+
+/* ========= میانبرهای کیبورد ========= */
+document.addEventListener('keydown', (e) => {
+    // Ctrl+N برای تسک جدید
+    if (e.ctrlKey && e.key === 'n') {
+        e.preventDefault();
+        addTaskBtn.click();
+    }
+    // Esc برای بستن مودال
+    if (e.key === 'Escape') {
+        modal.style.display = 'none';
+        currentEditId = null;
+    }
+});
+
 /* ========= اجرای اولیه ========= */
 renderTasks();
