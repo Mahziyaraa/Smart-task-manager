@@ -161,10 +161,41 @@ header h1 {
 /* ===== تسک‌ها ===== */
 
 .task {
-    padding: 6px 10px;
-    margin: 8px 0;
+    display: flex;
+    justify-content: space-between;
+    /* متن چپ - دکمه راست */
+    align-items: center;
+    /* وسط چین عمودی */
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    gap: 10px;
+}
+
+.task span {
+    flex: 1;
+    /* متن کل فضا رو بگیره */
+    word-break: break-word;
+    /* اگر متن طولانی بود بشکنه */
+}
+
+.delete-btn {
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
     border-radius: 6px;
-    cursor: grab;
+    cursor: pointer;
+    flex-shrink: 0;
+    /* کوچیک نشه */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-btn:hover {
+    background: #cc0000;
 }
 
 

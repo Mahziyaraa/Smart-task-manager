@@ -32,11 +32,9 @@ const accordions = document.querySelectorAll(".accordion-btn");
 accordions.forEach(btn => {
     btn.addEventListener("click", () => {
         const content = btn.nextElementSibling;
-        if (content.style.maxHeight) {
-            content.style.maxHeight = null;
-        } else {
-            content.style.maxHeight = content.scrollHeight + "px";
-        }
+        content.style.maxHeight = content.style.maxHeight ?
+            null :
+            content.scrollHeight + "px";
     });
 });
 
@@ -59,7 +57,6 @@ applyBgBtn.addEventListener("click", () => {
     bgFileInput.value = "";
 });
 
-// بارگذاری بک‌گراند ذخیره شده
 const savedBg = localStorage.getItem("boardBg");
 if (savedBg) {
     boardEl.style.backgroundImage = `url(${savedBg})`;
@@ -67,7 +64,7 @@ if (savedBg) {
     boardEl.style.backgroundPosition = "center";
 }
 
-/* ========= تابع renderTasks ========= */
+/* ========= renderTasks ========= */
 function renderTasks() {
     const priorityOrder = { high: 1, medium: 2, low: 3 };
     tasks.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
@@ -85,17 +82,38 @@ function renderTasks() {
 
         const div = document.createElement("div");
         div.className = "task";
-        div.textContent = task.title;
         div.dataset.id = task.id;
         div.dataset.status = task.status;
         div.draggable = true;
+
+        /* متن */
+        const span = document.createElement("span");
+        span.textContent = task.title;
+
+        /* دکمه حذف */
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "❌";
+        deleteBtn.className = "delete-btn";
+
+        deleteBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            tasks = tasks.filter(t => t.id !== task.id);
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            renderTasks();
+        });
+
+        div.appendChild(span);
+        div.appendChild(deleteBtn);
 
         if (task.priority === "high") div.style.backgroundColor = "#ff9999";
         if (task.priority === "medium") div.style.backgroundColor = "#ffe699";
         if (task.priority === "low") div.style.backgroundColor = "#e3e8ff";
 
         div.addEventListener("dblclick", () => openModal(task));
-        div.addEventListener("dragstart", () => div.classList.add("dragging"));
+        div.addEventListener("dragstart", (e) => {
+            e.dataTransfer.setData("text/plain", task.id);
+            div.classList.add("dragging");
+        });
         div.addEventListener("dragend", () => div.classList.remove("dragging"));
 
         if (task.status === "todo") todoEl.appendChild(div);
@@ -115,19 +133,29 @@ addTaskBtn.addEventListener("click", () => {
 });
 
 /* ========= Drag & Drop ========= */
+
 const columns = document.querySelectorAll(".task-list");
+
 columns.forEach(column => {
-    column.addEventListener("dragover", e => { e.preventDefault(); const dragging = document.querySelector(".dragging"); if (dragging) column.appendChild(dragging); });
-    column.addEventListener("drop", () => {
-        const dragging = document.querySelector(".dragging");
-        if (dragging) {
-            const taskId = Number(dragging.dataset.id);
-            const task = tasks.find(t => t.id === taskId);
+
+    column.addEventListener("dragover", (e) => {
+        e.preventDefault();
+    });
+
+    column.addEventListener("drop", (e) => {
+        e.preventDefault();
+
+        const taskId = e.dataTransfer.getData("text/plain");
+        if (!taskId) return;
+
+        const task = tasks.find(t => t.id === Number(taskId));
+        if (task) {
             task.status = column.id;
             localStorage.setItem("tasks", JSON.stringify(tasks));
             renderTasks();
         }
     });
+
 });
 
 /* ========= Modal functions ========= */
@@ -145,8 +173,10 @@ closeModal.addEventListener("click", () => {
 });
 
 window.addEventListener("click", (e) => {
-    if (e.target === modal) { modal.style.display = "none";
-        currentEditId = null; }
+    if (e.target === modal) {
+        modal.style.display = "none";
+        currentEditId = null;
+    }
 });
 
 saveTaskBtn.addEventListener("click", () => {
