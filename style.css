@@ -563,3 +563,53 @@ body.dark-mode .column h2 {
     border-bottom: 2px solid #555;
     font-weight: bold;
 }
+
+
+/* ===== ریسپانسیو موبایل ===== */
+
+@media (max-width: 768px) {
+    .board {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+    }
+    .column {
+        max-height: none;
+        width: 100%;
+    }
+    header {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    header h1 {
+        font-size: 18px;
+    }
+    .filters {
+        flex-direction: column;
+        gap: 10px;
+        margin: 10px;
+        padding: 10px;
+    }
+    .task {
+        font-size: 14px;
+    }
+    .delete-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    #addTaskBtn {
+        padding: 6px 10px;
+        font-size: 14px;
+    }
+    .hamburger-content {
+        width: 200px;
+        left: 0;
+        right: auto;
+    }
+    .modal-content {
+        width: 90%;
+        max-width: 300px;
+        margin: 20px;
+    }
+}
