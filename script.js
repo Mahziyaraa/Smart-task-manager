@@ -38,7 +38,9 @@ darkModeBtn.addEventListener("click", () => {
     } else {
         localStorage.setItem("darkMode", "disabled");
     }
+    renderTasks(); // این خط اضافه بشه بعد toggle
 });
+
 hamburgerBtn.addEventListener("click", () => {
     hamburgerMenu.classList.toggle("active");
 });
@@ -121,10 +123,15 @@ function renderTasks() {
 
         div.appendChild(span);
         div.appendChild(deleteBtn);
-
-        if (task.priority === "high") div.style.backgroundColor = "#ff9999";
-        if (task.priority === "medium") div.style.backgroundColor = "#ffe699";
-        if (task.priority === "low") div.style.backgroundColor = "#e3e8ff";
+        if (document.body.classList.contains("dark-mode")) {
+            if (task.priority === "high") div.style.backgroundColor = "#cc6666";
+            if (task.priority === "medium") div.style.backgroundColor = "#ccbb66";
+            if (task.priority === "low") div.style.backgroundColor = "#6666cc";
+        } else {
+            if (task.priority === "high") div.style.backgroundColor = "#ff9999";
+            if (task.priority === "medium") div.style.backgroundColor = "#ffe699";
+            if (task.priority === "low") div.style.backgroundColor = "#e3e8ff";
+        }
 
         /* باز کردن modal */
         div.addEventListener("dblclick", () => openModal(task));
@@ -208,6 +215,7 @@ startTutorialBtn.addEventListener("click", () => {
     startTutorial();
 });
 const tutorialBox = document.getElementById("tutorialBox");
+
 const tutorialText = document.getElementById("tutorialText");
 const nextStepBtn = document.getElementById("nextStep");
 const endTutorialBtn = document.getElementById("endTutorial");

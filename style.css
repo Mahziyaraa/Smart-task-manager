@@ -161,15 +161,15 @@ header h1 {
 /* ===== تسک‌ها ===== */
 
 .task {
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #999;
+    /* کادر پیش‌فرض */
     display: flex;
     justify-content: space-between;
-    /* متن چپ - دکمه راست */
     align-items: center;
-    /* وسط چین عمودی */
-    padding: 8px 12px;
-    border-radius: 8px;
-    margin-bottom: 8px;
-    gap: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
 }
 
 .task span {
@@ -296,19 +296,42 @@ body::before {
     background-color: #45a049;
 }
 
+
+/* باکس Tutorial پایه */
+
 #tutorialBox {
-    display: none;
-    position: absolute;
-    background: rgba(255, 255, 255, 0.95);
-    border: 2px solid #4CAF50;
-    border-radius: 8px;
-    padding: 12px;
-    max-width: 220px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    font-family: Arial, sans-serif;
-    color: #333;
-    z-index: 999;
-    transition: all 0.2s ease;
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 0.8);
+    /* حالت عادی */
+    color: #fff;
+    /* متن عادی */
+    padding: 15px 20px;
+    border-radius: 10px;
+    max-width: 300px;
+    font-size: 14px;
+    z-index: 9999;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+
+/* وقتی دارک مود فعال شد، رنگ باکس و متن تغییر کنه */
+
+
+/* #tutorialBox.dark-mode {
+    background-color: #444;
+    color: #f0f0f0;
+} */
+
+body.dark-mode #tutorialBox {
+    background-color: #444 !important;
+    /* خاکستری تیره */
+    color: #f0f0f0 !important;
+    /* متن روشن و کاملاً خوانا */
+    border: 1px solid #666;
+    /* کادر ملایم برای تمایز */
 }
 
 #tutorialBox p {
@@ -356,8 +379,10 @@ body.dark-mode .column {
 }
 
 body.dark-mode .task {
-    border: 1px solid #333;
     color: #f1f1f1;
+    /* متن روشن روی بک‌گراند تاریک */
+    border: 1px solid #555;
+    /* کادر قشنگ و واضح */
 }
 
 body.dark-mode .hamburger-menu,
