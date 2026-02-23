@@ -1,13 +1,11 @@
-/* ========= انتخاب عناصر و بارگذاری داده‌ها ========= */
+// Selecting elements and loading data
 const addTaskBtn = document.getElementById("addTaskBtn");
 const todoEl = document.getElementById("todo");
 const doingEl = document.getElementById("doing");
 const doneEl = document.getElementById("done");
 
-// بارگذاری تسک‌ها از LocalStorage
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-
-/* ========= Modal متغیرها ========= */
+// Loading tasks from LocalStorage
+// Variabled modal
 const modal = document.getElementById("taskModal");
 const modalTitle = document.getElementById("modalTitle");
 const modalStatus = document.getElementById("modalStatus");
@@ -17,20 +15,20 @@ const closeModal = document.querySelector(".close");
 
 let currentEditId = null;
 
-/* ========= فیلتر ========= */
+// Filters
 const filterColumn = document.getElementById("filterColumn");
 const filterPriority = document.getElementById("filterPriority");
 
 filterColumn.addEventListener("change", renderTasks);
 filterPriority.addEventListener("change", renderTasks);
 
-/* ========= تابع رسم تسک‌ها ========= */
+// Task drawing function
 function renderTasks() {
-    // مرتب‌سازی بر اساس اولویت
+    // Sort by priority
     const priorityOrder = { high: 1, medium: 2, low: 3 };
     tasks.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
 
-    // پاک کردن ستون‌ها
+    // Clear columns
     todoEl.innerHTML = "";
     doingEl.innerHTML = "";
     doneEl.innerHTML = "";
@@ -40,7 +38,7 @@ function renderTasks() {
 
     tasks.forEach(task => {
 
-        // چک کردن فیلتر
+        // Filters Check
         if (selectedColumn !== "all" && task.status !== selectedColumn) return;
         if (selectedPriority !== "all" && task.priority !== selectedPriority) return;
 
@@ -51,36 +49,36 @@ function renderTasks() {
         div.dataset.status = task.status;
         div.draggable = true;
 
-        // رنگ‌بندی بر اساس اولویت
-        if (task.priority === "high") div.style.backgroundColor = "#ff9999"; // قرمز
-        if (task.priority === "medium") div.style.backgroundColor = "#ffe699"; // زرد
-        if (task.priority === "low") div.style.backgroundColor = "#e3e8ff"; // آبی
+        // Colorization based on priority
+        if (task.priority === "high") div.style.backgroundColor = "#ff9999"; // red
+        if (task.priority === "medium") div.style.backgroundColor = "#ffe699"; // yellow
+        if (task.priority === "low") div.style.backgroundColor = "#e3e8ff"; // blue
 
-        /* ===== باز کردن Modal برای ویرایش ===== */
+        // Open Modal for editing
         div.addEventListener("dblclick", () => {
             openModal(task);
         });
 
-        /* ===== Drag شروع ===== */
+        // Start drag
         div.addEventListener("dragstart", () => {
             div.classList.add("dragging");
         });
 
-        /* ===== Drag پایان ===== */
+        // Finish Drag
         div.addEventListener("dragend", () => {
             div.classList.remove("dragging");
         });
 
-        // اضافه کردن به ستون صحیح
+        // Add to the correct columns
         if (task.status === "todo") todoEl.appendChild(div);
         if (task.status === "doing") doingEl.appendChild(div);
         if (task.status === "done") doneEl.appendChild(div);
     });
 }
 
-/* ========= اضافه کردن تسک جدید ========= */
+// Add a new task
 addTaskBtn.addEventListener("click", () => {
-    const title = prompt("اسم تسک رو بنویس:");
+    const title = prompt(" چی کار داری :");
     if (!title) return;
 
     const task = {
@@ -95,7 +93,7 @@ addTaskBtn.addEventListener("click", () => {
     renderTasks();
 });
 
-/* ========= Drag & Drop واقعی ========= */
+// Real drag and drop
 const columns = document.querySelectorAll(".task-list");
 
 columns.forEach(column => {
@@ -127,7 +125,7 @@ function openModal(task) {
     modalPriority.value = task.priority || "low";
 }
 
-// بستن Modal
+// Close Modal
 closeModal.addEventListener("click", () => {
     modal.style.display = "none";
     currentEditId = null;
@@ -140,7 +138,7 @@ window.addEventListener("click", (e) => {
     }
 });
 
-// ذخیره تغییرات Modal
+// Save modal changes
 saveTaskBtn.addEventListener("click", () => {
     if (currentEditId === null) return;
 
@@ -155,5 +153,5 @@ saveTaskBtn.addEventListener("click", () => {
     currentEditId = null;
 });
 
-/* ========= اجرای اولیه ========= */
+//initial execution
 renderTasks();
