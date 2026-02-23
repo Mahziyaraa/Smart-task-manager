@@ -199,12 +199,12 @@ header h1 {
 }
 
 
-/* Style modal */
+/* ===== Modal تسک ===== */
+
 .modal {
     display: none;
-/* Default hide  */
-   position: fixed;
-    z-index: 1000;
+    position: fixed;
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
@@ -347,12 +347,69 @@ body.dark-mode #tutorialBox {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 13px;
+}
+
+#nextStep {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#nextStep:hover {
+    background-color: #45a049;
+}
+
+#endTutorial {
+    background-color: #f44336;
+    color: white;
+}
+
+#endTutorial:hover {
+    background-color: #d7372f;
+}
+
+body.dark-mode {
+    background-color: #121212;
+    color: #f1f1f1;
+}
+
+body.dark-mode header,
+body.dark-mode .filters,
+body.dark-mode .column {
+    background-color: #1e1e1e;
+    color: #f1f1f1;
+}
+
+body.dark-mode .task {
+    color: #f1f1f1;
+    /* متن روشن روی بک‌گراند تاریک */
+    border: 1px solid #555;
+    /* کادر قشنگ و واضح */
+}
+
+body.dark-mode .hamburger-menu,
+body.dark-mode #tutorialBox {
+    background-color: #1e1e1e;
+    color: #f1f1f1;
 }
 
 
-/* Filters */
+/* تمام بدنه و هدر و ستون‌ها و تسک‌ها */
 
-.filters {
+body,
+body header,
+body .filters,
+body .column,
+body .task,
+body .hamburger-menu,
+body #tutorialBox {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+
+/* کانتینر */
+
+.switch-container {
     display: flex;
     align-items: center;
     gap: 10px;
