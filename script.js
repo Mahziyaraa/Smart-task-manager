@@ -80,7 +80,7 @@ addTaskBtn.addEventListener("click", () => {
     const title = prompt(" چی کار داری :");
     if (!title) return;
 
-    const deadline = prompt("ددلاین (اختیاری، مثال: 2024-12-31):");
+    const deadline = prompt("تاریخ (اختیاری)");
 
     const task = {
         id: Date.now(),
@@ -93,7 +93,7 @@ addTaskBtn.addEventListener("click", () => {
     tasks.push(task);
     localStorage.setItem("tasks", JSON.stringify(tasks));
     renderTasks();
-    showToast('تسک جدید اضافه شد ✅');
+    showToast('کارت اضافه شد ✅');
 });
 
 // Real drag and drop
@@ -121,7 +121,7 @@ columns.forEach(column => {
             task.status = column.id;
             localStorage.setItem("tasks", JSON.stringify(tasks));
             renderTasks();
-            showToast(`تسک به "${getColumnName(column.id)}" منتقل شد ✅`);
+            showToast(`کارت به "${getColumnName(column.id)}" منتقل شد ✅`);
         }
     });
 });

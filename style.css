@@ -1,5 +1,4 @@
-/* ===== عمومی ===== */
-
+/* Public */
 body {
     font-family: sans-serif;
     margin: 0;
@@ -7,7 +6,7 @@ body {
 }
 
 
-/* ===== هدر ===== */
+/* Header */
 
 header {
     display: flex;
@@ -32,7 +31,7 @@ header h1 {
 }
 
 
-/* ===== Hamburger Menu ===== */
+/*  Hamburger Menu  */
 
 .hamburger-menu {
     position: relative;
@@ -59,14 +58,14 @@ header h1 {
 }
 
 
-/* ===== نمایش منو ===== */
+/* Show menu */
 
 .hamburger-menu.active .hamburger-content {
     display: block;
 }
 
 
-/* ===== Accordion ===== */
+/*  Accordion  */
 
 .accordion {
     width: 220px;
@@ -103,7 +102,7 @@ header h1 {
 }
 
 
-/* ===== فیلترها ===== */
+/* Filters */
 
 .filters {
     display: flex;
@@ -118,7 +117,7 @@ header h1 {
 }
 
 
-/* ===== Board ===== */
+/*  Board  */
 
 .board {
     display: flex;
@@ -129,7 +128,7 @@ header h1 {
 }
 
 
-/* ===== ستون‌ها ===== */
+/*  Columns  */
 
 .column {
     flex: 1;
@@ -137,28 +136,28 @@ header h1 {
     padding: 10px;
     border-radius: 12px;
     max-height: 65vh;
-    /* ارتفاع حداکثر ستون */
+    /* Maximum column height */
     overflow-y: auto;
-    /* فقط تسک‌ها اسکرول */
+    /* Scroll only tasks */
 }
 
 .column h2 {
     text-align: center;
     position: sticky;
-    /* باعث میشه عنوان در بالای ستون ثابت باشه */
+    /* Makes the title stay fixed at the top of the column */
     top: 0;
-    /* فاصله از بالای ستون */
+    /* Distance from top of column */
     background-color: #cdd6ff;
-    /* رنگ پس‌زمینه مشابه ستون تا خوانا باشه */
+    /* Background color is the same as the column for readability */
     padding: 6px 0;
     z-index: 5;
-    /* روی تسک‌ها قرار بگیره */
+    /* Place on tasks */
     border-bottom: 1px solid #999;
-    /* جداکننده */
+    /* Separator */
 }
 
 
-/* ===== تسک‌ها ===== */
+/* Tasks */
 
 .task {
     padding: 10px;
@@ -174,9 +173,9 @@ header h1 {
 
 .task span {
     flex: 1;
-    /* متن کل فضا رو بگیره */
+    /* Text takes up the entire space */
     word-break: break-word;
-    /* اگر متن طولانی بود بشکنه */
+    /* Break if text is long */
 }
 
 .delete-btn {
@@ -188,7 +187,6 @@ header h1 {
     border-radius: 6px;
     cursor: pointer;
     flex-shrink: 0;
-    /* کوچیک نشه */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -199,7 +197,7 @@ header h1 {
 }
 
 
-/* ===== Modal تسک ===== */
+/* Tasks Modal */
 
 .modal {
     display: none;
@@ -240,18 +238,18 @@ header h1 {
 }
 
 
-/* لایه بک‌گراند صفحه */
+/* Page background layer */
 
 body {
     position: relative;
     margin: 0;
     min-height: 100vh;
     background-color: #f5f5f5;
-    /* رنگ پایه اگر تصویر نباشه */
+    /* Base color if not an image */
 }
 
 
-/* لایه تصویر بک‌گراند */
+/* Background image layer */
 
 
 /* body::before {
@@ -297,10 +295,10 @@ body::before {
 }
 
 
-/* باکس Tutorial پایه */
+/* Basic Tutorial Box */
 
 
-/* حالت لایت مود */
+/* Lite mode */
 
 #tutorialBox {
     position: fixed;
@@ -319,7 +317,7 @@ body::before {
 }
 
 
-/* وقتی دارک مود فعال شد، رنگ باکس و متن تغییر کنه */
+/* Change the color of the box and text when dark mode is activated */
 
 
 /* #tutorialBox.dark-mode {
@@ -329,11 +327,11 @@ body::before {
 
 body.dark-mode #tutorialBox {
     background-color: #444 !important;
-    /* خاکستری تیره */
+    /* Dark gray */
     color: #f0f0f0 !important;
-    /* متن روشن و کاملاً خوانا */
+    /* Clear and fully legible text */
     border: 1px solid #666;
-    /* کادر ملایم برای تمایز */
+    /* Soft box for distinction */
 }
 
 #tutorialBox p {
@@ -382,9 +380,9 @@ body.dark-mode .column {
 
 body.dark-mode .task {
     color: #f1f1f1;
-    /* متن روشن روی بک‌گراند تاریک */
+    /* Light text on dark background */
     border: 1px solid #555;
-    /* کادر قشنگ و واضح */
+    /* Nice and clear frame */
 }
 
 body.dark-mode .hamburger-menu,
@@ -394,7 +392,7 @@ body.dark-mode #tutorialBox {
 }
 
 
-/* تمام بدنه و هدر و ستون‌ها و تسک‌ها */
+/* All body, header, columns, and tasks */
 
 body,
 body header,
@@ -407,7 +405,7 @@ body #tutorialBox {
 }
 
 
-/* کانتینر */
+/* Container */
 
 .switch-container {
     display: flex;
@@ -419,7 +417,7 @@ body #tutorialBox {
 }
 
 
-/* خود سوئیچ */
+/* The switch itself */
 
 .switch {
     position: relative;
@@ -435,7 +433,7 @@ body #tutorialBox {
 }
 
 
-/* کشویی */
+/* Slider */
 
 .slider {
     position: absolute;
@@ -462,7 +460,7 @@ body #tutorialBox {
 }
 
 
-/* وقتی فعال شد */
+/* When activated */
 
 input:checked+.slider {
     background-color: #4CAF50;
@@ -473,7 +471,7 @@ input:checked+.slider::before {
 }
 
 
-/* انیمیشن اضافه کردن تسک */
+/* Add task animation */
 
 @keyframes slideIn {
     from {
@@ -491,7 +489,7 @@ input:checked+.slider::before {
 }
 
 
-/* هاور روی تسک */
+/* Hover over task */
 
 .task:hover {
     transform: scale(1.02);
@@ -499,7 +497,7 @@ input:checked+.slider::before {
 }
 
 
-/* افکت ستون هنگام درگ */
+/* Column effect when dragging */
 
 .column.drag-over {
     background-color: #d0e8ff !important;
@@ -514,7 +512,7 @@ body.dark-mode .column.drag-over {
 }
 
 
-/* انیمیشن تسک */
+/* Task animation */
 
 .task {
     transition: all 0.3s ease;
@@ -531,7 +529,7 @@ body.dark-mode .column.drag-over {
 }
 
 
-/* انیمیشن Toast */
+/* Task animation */
 
 @keyframes slideUp {
     from {
@@ -557,15 +555,15 @@ body.dark-mode .column.drag-over {
 
 body.dark-mode .column h2 {
     color: #111 !important;
-    /* مشکی نرم */
+    /* Toast animation */
     background-color: #9ca8d6;
-    /* آبی خاکستری */
+    /* Blue-gray */
     border-bottom: 2px solid #555;
     font-weight: bold;
 }
 
 
-/* ===== ریسپانسیو موبایل ===== */
+/*  Mobile Responsive  */
 
 @media (max-width: 768px) {
     .board {
