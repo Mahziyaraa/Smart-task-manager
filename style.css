@@ -98,12 +98,11 @@ header button:hover {
 }
 
 
-/* ===== Modal استایل ===== */
-
+/* Style modal */
 .modal {
     display: none;
-    /* پنهان پیش‌فرض */
-    position: fixed;
+/* Default hide  */
+   position: fixed;
     z-index: 1000;
     left: 0;
     top: 0;
@@ -149,7 +148,7 @@ header button:hover {
 }
 
 
-/* ===== فیلترها ===== */
+/* Filters */
 
 .filters {
     display: flex;
